@@ -1,0 +1,7 @@
+streamlit
+pandas
+tensorflow
+scikit-learn
+streamlit-lottie
+gdown
+joblib
