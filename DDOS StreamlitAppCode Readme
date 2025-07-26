@@ -1,0 +1,66 @@
+Explanation of the DDoS Attacks Detection Streamlit App Code
+Overview
+This code creates a Streamlit web app that uses a trained LSTM deep learning model to detect DDoS attacks based on network traffic features. The app allows users to either manually input feature values or upload a CSV file with batch data, then outputs predictions classifying the input as either Benign or Attack.
+Code Breakdown
+1. Imported Libraries
+streamlit: for building the web app UI.
+pandas: for data manipulation.
+joblib: for loading a pre-fitted scaler object.
+requests: (commented out) intended for fetching Lottie animations.
+sklearn.preprocessing.StandardScaler: for scaling input data to the model.
+tensorflow.keras.models.load_model: for loading the trained LSTM model.
+tensorflow.keras.activations.sigmoid: to convert model outputs to probabilities.
+streamlit_lottie: to render animations (commented out here).
+os, gdown: imported but not used directly here.
+
+2. run() Function — Main App Logic
+Displays a header title "DDoS Attacks App".
+(Commented-out) code to load and display a Lottie animation related to traffic, enhancing the UI visually.
+
+3. Loading Model and Scaler Resources
+Defines load_resources() function with @st.cache_resource decorator for caching to avoid repeated loading on reruns.
+Loads the deep learning model from 'best_model-ddos.h5'.
+Loads a StandardScaler object from 'scaler.pkl' to normalize inputs before prediction.
+Calls load_resources() twice (redundant; could be once).
+
+4. Input Scaling Utility - scale_input(X)
+Handles scaling inputs for either 2D or 3D numpy arrays.
+For 3D arrays (expected shape (samples, timesteps, features)), reshapes to 2D, scales with the loaded scaler, then reshapes back to 3D with a single feature dimension.
+For 2D arrays, scales directly.
+
+5. Feature Definitions
+Defines a list features with 30 tuples (feature_name, data_type) matching the features the model was trained on.
+Features describe various packet lengths, counts, time intervals, ports, and other network flow metrics.
+
+6. Manual Input Form
+Displays a form titled "Manual Input (Full Sequence of length 30)".
+Dynamically creates inputs arranged in 4 columns for all features:
+Uses st.number_input with appropriate data types (int or float) and default values.
+On form submission:
+Collects input into a DataFrame.
+Casts all columns to their defined types.
+Reshapes data to (1, 30, 1) to fit the model input.
+Scales the input using scale_input().
+Runs prediction through the model, getting a raw output value.
+Applies sigmoid activation to convert raw output to probability between 0 and 1.
+Classifies the input as "Benign" if probability >= 0.5, else "Attack".
+Displays the prediction and probability.
+
+7. Batch Testing via CSV Upload
+Allows uploading a CSV file with network traffic data.
+Filters uploaded data to only keep columns matching the defined features.
+Converts feature columns to proper data types.
+Reshapes the data to (samples, 30, 1) format.
+Scales the data with scale_input().
+Predicts raw output values from the model and applies sigmoid to get probabilities.
+Uses a threshold of 0.55 to classify each sample as "Benign" or "Attack".
+Counts and displays the number of predictions per class.
+Shows a bar chart visualizing the counts.
+
+Summary
+The app uses an LSTM model trained on time series of 30 network traffic features to detect DDoS attacks.
+Preprocessing includes careful scaling and reshaping to fit the model’s expected input shape.
+The user interface supports both single manual input and batch CSV uploads.
+Predictions are probabilistic, with thresholds controlling class labels.
+
+
