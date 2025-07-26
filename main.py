@@ -28,7 +28,7 @@ else:
     st.title("Network Traffic Anomaly Detection Suite")
 
 # Tabs for each sub‑app
-tab1, tab2 = st.tabs(["DDoS Attacks App", "CIC DDoS Detection App"])
+tab1, tab2 = st.tabs(["DDoS Attacks App", "CIC2010 XSS+SQL Detection App"])
 
 with tab1:
     appddos.run()
