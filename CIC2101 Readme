@@ -1,0 +1,82 @@
+Code Explanation for CIC2010 XSS & SQL Injection Detection Streamlit App
+Overview
+This code implements a simple web application using Streamlit that loads a pre-trained deep learning model (a .h5 file) to detect XSS and SQL Injection attacks based on CIC2010 HTTP request data. The app allows users to input data manually or upload a CSV file for batch testing.
+
+Code Details
+1. Imported Libraries
+streamlit for building the interactive UI.
+
+pandas for data manipulation.
+
+json to read the page mapping JSON file.
+
+tensorflow.keras.models.load_model to load the deep learning model.
+
+sklearn.preprocessing for data preprocessing (scaling and encoding).
+tensorflow.keras.preprocessing for tokenizing and padding cookie text data.
+os, gdown for file handling (not directly used here).
+
+2. The run() Function
+Displays the app header: CIC2010 Xss&Sqli Detection App.
+
+3. Resource Loading - load_resources() Function
+Loads the deep learning model stored in "best_model-cic.h5".
+
+Loads the "page_mapping.json" file containing page encoding mappings.
+
+Uses @st.cache_resource decorator to cache the resources and improve performance.
+
+4. Data Preprocessing - preprocess(df) Function
+Takes a DataFrame and creates a copy to avoid modifying the original data.
+
+Maps the "Method" column from text (GET, POST, PUT) to numeric codes (0, 1, 2).
+
+Extracts the numeric content length from the "Content-Length" string.
+
+Extracts the page name (with .jsp extension) from the URL.
+
+Extracts a clean URL segment and encodes it using LabelEncoder.
+
+Encodes the page using the loaded page mapping.
+
+Converts cookie text to sequences of integers using Tokenizer and pads the sequences to equal length.
+
+Selects the second token of the padded cookie sequence (or the first if only one token exists).
+
+Normalizes the selected columns (length, clean_URL, cookie_1) to the range [0,1].
+
+Combines relevant features into a NumPy array and reshapes it to fit the model input shape (samples, 1, 5).
+
+5. Manual Input Interface
+Contains a form with four input fields:
+
+HTTP Method (dropdown): GET, POST, or PUT.
+
+Content-Length (text input, e.g., "Content-Length: 63").
+
+Full URL request line (text input).
+
+Cookie string (text input).
+
+On clicking the "Predict CIC" button, the input is preprocessed and passed to the model for prediction.
+
+If the model output probability is >= 0.5, the request is classified as "Normal"; otherwise "Anomalous".
+
+Displays the predicted label and probability.
+
+6. Batch Testing Interface
+Allows uploading a CSV file containing multiple CIC requests.
+
+Reads the uploaded file and preprocesses all entries.
+
+Passes the batch data to the model to predict probabilities.
+
+Classifies results using a threshold of 0.55.
+
+Displays a bar chart and counts of normal vs anomalous predictions.
+
+General Notes
+*The code applies multiple preprocessing steps to convert raw HTTP request data into numeric features suitable for the model.
+*The model expects 3D input shaped (samples, timesteps, features), where timestep is 1 here.
+*The output is a probability score indicating the likelihood of a request being normal or anomalous.
+*Thresholds and preprocessing steps can be adjusted depending on the use case.
