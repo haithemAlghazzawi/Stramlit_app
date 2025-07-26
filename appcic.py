@@ -13,7 +13,7 @@ from tensorflow.keras.models import load_model
 import streamlit as st
 
 def run():
-    st.header("CIC DDoS Detection App")
+    st.header("CIC2010 Xss&Sqli Detection App")
 
     @st.cache_resource
     def load_resources():
