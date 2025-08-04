@@ -67,7 +67,7 @@ def run():
         dfb = pd.read_csv(up)
         Xb = preprocess(dfb)
         ps = model.predict(Xb).flatten()
-        labs = ["Normal" if x >= 0.55 else "Anomalous" for x in ps]
+        labs = ["Normal" if x > 0.55 else "Anomalous" for x in ps]
         cnt = pd.Series(labs).value_counts()
         st.bar_chart(cnt)
         st.write(cnt)
