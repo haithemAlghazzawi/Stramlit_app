@@ -5,9 +5,7 @@ One for DDoS attack detection
 One for XSS and SQL Injection detection (CIC2010 dataset)
 
 🔧 1. Import Statements
-python
-Copy
-Edit
+
 import streamlit as st
 import requests
 from streamlit_lottie import st_lottie
@@ -22,9 +20,7 @@ streamlit_lottie: To display animations from LottieFiles.
 appddos, appcic: Custom Python modules (your sub-apps) for handling different types of attack detection. Each must have a run() function.
 
 ⚙️ 2. Page Configuration
-python
-Copy
-Edit
+
 st.set_page_config(
     page_title="Network Traffic Anomaly Detection Suite",
     layout="wide",
@@ -34,9 +30,7 @@ Sets the page title and makes the layout wide to utilize more screen space.
 This must be the first Streamlit command.
 
 🎞️ 3. Lottie Animation Loader
-python
-Copy
-Edit
+
 def load_lottie_url(url):
     r = requests.get(url)
     if r.status_code != 200:
@@ -47,9 +41,7 @@ Helper function that loads a Lottie animation from a URL.
 If the response fails (not status code 200), returns None.
 
 ✨ 4. Display the Header and Animation
-python
-Copy
-Edit
+
 lottie = load_lottie_url("https://assets6.lottiefiles.com/packages/lf20_j1adxtyb.json")
 if lottie:
     st.header("Network Traffic Anomaly Detection Suite")
@@ -61,9 +53,7 @@ If the animation loads successfully, show it along with a header.
 If it fails, just show the title.
 
 🧭 5. Tabbed Interface for Sub-Apps
-python
-Copy
-Edit
+
 tab1, tab2 = st.tabs(["DDoS Attacks App", "CIC2010 XSS+SQL Detection App"])
 Creates two tabs for navigation in the same app:
 
@@ -72,9 +62,7 @@ tab1: DDoS detection
 tab2: XSS/SQLi detection (CIC2010 dataset)
 
 🚀 6. Running Each Sub-App Inside Its Tab
-python
-Copy
-Edit
+
 with tab1:
     appddos.run()
 
